@@ -18,12 +18,24 @@
  */
 package org.apache.synapse.config.xml.endpoints;
 
+import org.apache.axiom.om.OMElement;
 import org.apache.synapse.config.xml.AbstractTestCase;
+import org.apache.synapse.endpoints.WSDLEndpoint;
 
 public class WSDLEndpointSerializationTest extends AbstractTestCase {
 
         public void testWSDLEndpointScenarioOne() throws Exception {
+            String inputXML = "<endpoint>\n" +
+                                    "<wsdl uri=\"file:repository/conf/sample/resources/proxy/sample_proxy_1.wsdl\"\n" +
+                                    "service=\"SimpleStockQuoteService\"\n" +
+                                    "port=\"SimpleStockQuoteServiceHttpSoap11Endpoint\"/>\n" +
+                                "</endpoint>";
+            OMElement inputElement = createOMElement(inputXML);
+            WSDLEndpoint endpoint = (WSDLEndpoint) WSDLEndpointFactory.getEndpointFromElement(inputElement,
+                    true, null);
+
+            OMElement serializedOut = WSDLEndpointSerializer.getElementFromEndpoint(endpoint);
+            assertTrue(compare(serializedOut,inputElement));
 
         }
-    }
 }
